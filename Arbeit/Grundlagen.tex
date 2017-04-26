@@ -3,43 +3,76 @@
 \subsection{Spiele in strategischer Form}
 
 \begin{defn}
-	Ein \emph{(nichtkooperatives) Spiel in strategischer Form} ist ein Tupel $\Gamma = (I, X = (X_i)_{i \in I}, (c_i)_{i\in I})$. Dabei ist
+	Ein \emph{(nichtkooperatives) Spiel in strategischer Form} ist ein Tupel $\Gamma = (I, X = \prod_{i\in I} X_i, (c_i)_{i\in I})$. Dabei ist
 	\begin{itemize}
 		\item $I$ die Menge der Spieler,
-		\item $X_i$ die Menge der (reinen) Strategien von Spieler $i$,
-		\item $c_i: X_i \to \IR$ die Kostenfunktion von Spieler $i$.
+		\item $X_i$ die nicht-leere Menge der (reinen) Strategien von Spieler $i$,
+		\item $c_i: X \to \IR$ die Kostenfunktion von Spieler $i$.
 	\end{itemize}
 	Das eigentliche Spiel besteht nun daraus, dass jeder Spieler versucht durch die Wahl einer Strategie $x_i \in X_i$ aus seinem Strateegieraum die eigenen Kosten $c_i((x_j)_{j \in I})$ zu minimieren. Das Tupel $x \coloneqq (x_j)_{j \in I}$ bezeichnen wir dabei als \emph{Strategieprofil}.
 	
-	Wir nennen ein solches Spiel \emph{endlich}, wenn der gesamte Strategieraum $X$ endlich ist und $N$-Personenspiel, wenn $\abs{I} = N \in \IN$ gilt.
+	Wir nennen ein solches Spiel \emph{endlich}, wenn der gesamte Strategieraum $X$ endlich ist, und $N$-Personenspiel, wenn $\abs{I} = N \in \IN$ gilt.
 \end{defn}
 
 \begin{beob}\label{beob:endlicheSpiele}
-	Ist ein Spiel endlich, so können wir in der Regel ohne Einschränkung annehmen, dass auch die Menge der Spieler endlich ist. Denn die Menge $X = \prod_{i\in I} X_i$ kann nur endlich sein, wenn höchsten endliche viele $X_i$ einelementig sind. Also haben in einem endlichen Spiel nur endlich viele Spieler mehr als eine Strategie. Für die Suche beispielsweise nach Nash-Gleichgewichten oder Verbesserungspfaden spielen aber nur solche Spieler eine Rolle. Wir werden dies später in \Cref{sec:Morphismen} formal zeigen (siehe \Cref{bsp:EinStratSpielerWeglassen}).
+	Ist ein Spiel endlich, so können wir in der Regel ohne Einschränkung annehmen, dass auch die Menge der Spieler endlich ist. Denn die Menge $X = \prod_{i\in I} X_i$ kann nur endlich sein, wenn alle bis auf endliche viele $X_i$ einelementig sind. Also haben in einem endlichen Spiel nur endlich viele Spieler mehr als eine Strategie. Für die Suche beispielsweise nach Nash-Gleichgewichten oder Verbesserungspfaden spielen aber nur solche Spieler eine Rolle. Wir werden dies später in \Cref{sec:Morphismen} formal zeigen (siehe \Cref{kor:EinStratSpielerWeglassen}).
 \end{beob}
+
+\begin{notation}
+	Ein endliches $2$-Personenspiel lässt sich leicht als Matrix darstellen. Deren Zeilen werden durch die Strategien von Spieler $1$ indiziert, ihre Spalten durch die Strategien von Spieler $2$. Jedem Tupel $(x_1, x_2)$ aus je einer Strategie der beiden Spieler (also einem Strategieprofil) entspricht dann genau ein Eintrag der Matrix, welcher das Tupel $(c_1(x_1, x_2), c_2(x_1, x_2))$ ist.
+\end{notation}
+
+\begin{bsp}\label{bsp:SchereSteinPapier}
+	Das Spiel Schere-Stein-Papier lässt sich wie folgt als strategisches Spiel beschreiben. Jeder der beiden Spieler hat eine dreielementige Strategiemenge, nämlich $X_1 = X_2 = \set{\text{\faHandScissorsO},\text{ \faHandRockO},\text{ \faHandPaperO}}$, und die durch die folgende Matrix gegebenen Kostenfunktionen:
+	\begin{center}
+		\begin{tabular}{c||c|c|c}
+								& \faHandScissorsO 	& \faHandRockO	& \faHandPaperO 	\\\hline\hline
+			\faHandScissorsO	& $(0,0)$			& $(1,-1)$ 		& $(-1,1)$			\\\hline
+			\faHandRockO		& $(-1,1)$			& $(0,0)$		& $(1,-1)$			\\\hline
+			\faHandPaperO		& $(1,-1)$			& $(-1,1)$		& $(0,0)$
+		\end{tabular}
+	\end{center}	
+\end{bsp}
+
+\begin{bsp}\label{bsp:GefangenenDilemma}\todo{Quelle für Gefangenen-Dilemma? Evtl. genauer beschreiben (auch vorheriges Beispiel)?}
+	Ein klassisches Beispiel der Spieltheorie ist das Gefangenendilemma, in dem beide Spieler je zwei Strategien haben $X_1 = X_2 = \set{\text{gestehen},\text{ leugnen}}$ und die Kostenfunktionen durch die folgende Matrix beschrieben werden:
+	\begin{center}
+		\begin{tabular}{c||c|c}
+							& \text{gestehen} 	& \text{leugnen}	\\\hline\hline
+			\text{gestehen}	& $(2,2)$			& $(0,3)$ 			\\\hline
+			\text{leugnen}	& $(3,0)$			& $(1,1)$	
+		\end{tabular}
+	\end{center}	
+\end{bsp}
 
 \begin{notation}
 	Zu einem Strategieprofil $x \in X$ und einer einzelnen Strategie $\hat{x}_i \in X_i$ bezeichnen wir einer Konvention aus \cite{Polyequilibrium} folgend mit $(x \mid \hat{x}_i)$ das Strategieprofil, das aus $x$ entsteht, wenn Spieler $i$ einseitig seine Strategie von $x_i$ auf $\hat{x}_i$ ändert.
 \end{notation}
 
 \begin{defn}
-	Ein Strategieprofil $x \in X$ ist ein \emph{Nash-Gleichgewicht}, wenn für jeden Spieler $i \in I$ und jede seiner Strategien $\hat{x}_i$ gilt:
+	Ein Strategieprofil $x \in X$ ist ein \emph{(reines) Nash-Gleichgewicht}, wenn für jeden Spieler $i \in I$ und jede seiner Strategien $\hat{x}_i$ gilt:
 		\[c_i(x \mid \hat{x}_i) \geq c_i(x)\]
 	Ein Nash-Gleichgewicht ist also ein Strategieprofil, aus dem heraus kein Spieler einen Anreiz für einen einseitigen Strategiewechsel hat.	
 \end{defn}
 
-In \cite[Definition 2.2]{KoordDummy} werden Koordinations- und Dummy-Spiele definiert. Analog dazu definieren wir hier zusätzlich skalierte Koordinationsspiele:
+\begin{bsp}
+	Im Gefangenendilemma (\Cref{bsp:GefangenenDilemma}) gibt es genau ein Nash-Gleichgewicht, nämlich $(\text{gestehen},\text{ gestehen})$, Schere-Stein-Papier (\Cref{bsp:SchereSteinPapier}) besitzt kein Nash-Gleichgewicht.
+\end{bsp}
+
+In \cite[Definition 2.2]{KoordDummy} werden Koordinations- und Dummy-Spiele definiert. Daran anlehnend definieren wir hier zusätzlich skalierte Koordinationsspiele und Dummy-Spieler:
 \begin{defn}
-	Ein Spiel $\Gamma = (I, X = (X_i)_{i \in I}, (c_i)_{i\in I})$ heißt
+	Ein Spiel $\Gamma = (I, X, (c_i)_{i\in I})$ heißt
 	\begin{itemize}
 		\item \emph{Koordinationsspiel}, wenn alle Spieler eine gemeinsame Kostenfunktion nutzen, wenn also gilt $c_i = c_j$ für alle Spieler $i,j \in I$.
 		\item \emph{skaliertes Koordinationsspiel}, wenn jeder Spieler eine streng monoton skalierte Variante einer gemeinsamen Kostenfunktion verwendet, d.h. wenn es eine Funktion $c: X \to \IR$ und streng monotone Funktionen $f_i: \IR \to \IR$ gibt, sodass für jeden Spieler $c_i = f_i \circ c$ gilt.
-		\item \emph{Dummyspiel}, wenn die alleinige Abweichung eines einzelnen Spielers von einem gegebenen Strategieprofil nie zu einer Änderung seiner Kosten führt. D.h. wenn für alle $x \in X, i \in I$ und $\hat{x}_i \in X_i$ gilt $c_i(x) = c_i(x \mid \hat{x}_i)$.
 	\end{itemize}
+	Ein Spieler $i \in I$ heißt \emph{Dummy-Spieler}, wenn die alleinige Abweichung dieses Spielers von einem gegebenen Strategieprofil nie zu einer Änderung seiner Kosten führt. D.h. wenn für alle $x \in X, i \in I$ und $\hat{x}_i \in X_i$ gilt $c_i(x) = c_i(x \mid \hat{x}_i)$. 
+	
+	Das ganze Spiel $\Gamma$ heißt \emph{Dummy-Spiel}, wenn alle Spieler des Spiels Dummy-Spieler sind.
 \end{defn}
 
 \begin{beob}
-	In einem (skalierten) Koordinationsspiel ist ein Strategieprofil bereits ein Nash-Gleichgewicht, wenn es nur für einen der Spieler optimal ist. Insbesondere haben damit endliche (skalierte) Koordinationsspiele immer mindestens ein Nash-Gleichgewicht, nämlich das (globale) Minimum der gemeinsamen Kostenfunktion.
+	In einem (skalierten) Koordinationsspiel sind globale Minima der gemeinsamen Kostenfunktion Nash-Gleichgewichte des Spiels. Insbesondere haben damit endliche (skalierte) Koordinationsspiele immer mindestens ein Nash-Gleichgewicht.
 	
 	In einem Dummy-Spiel ist \emph{jedes} Strategieprofil ein Nash-Gleichgewicht, da ein einzelner Spieler durch einseitige Abweichung seine Kosten nie verändern und daher insbesondere nicht verringern kann.
 \end{beob}
@@ -47,26 +80,41 @@ In \cite[Definition 2.2]{KoordDummy} werden Koordinations- und Dummy-Spiele defi
 
 \subsection{Abweichungspfade}
 
-Aus \cite{MonShap}/\cite{BestRespPot}\todo{Motivation/Anschauung}
+Eine natürliche Methode Nash-Gleichgewichte in Spielen zu finden ist die folgende: Man beginnt bei einem beliebigen Strategieprofil und prüft, ob dieses bereits ein Nash-Gleichgewicht ist. Ist dies der Fall, ist man bereits fertig. Andernfalls gibt es wenigstens einen Spieler, der seine Kosten durch einen einseitigen Strategiewechsel verbessern kann. Dadurch erhält man ein neues Strategieprofil, für das man erneut prüft, ob es ein Nash-Gleichgewicht ist usw. Terminiert dieses Verfahren, so hat man ein Nash-Gleichgewicht gefunden. 
 
-\begin{defn}
-	Eine Folge von Strategieprofilen $\gamma = (x^0, x^1, x^2, \dots) \in X^\IN$ ist ein \emph{Pfad}, wenn jeder Schritt aus der Abweichung eines einzelnen Spielers besteht. Das heißt wenn es für jeden Schritt $k$ einen Spieler $i(k) \in I$ gibt, sodass das Profil $x^{k}$ aus $x^{k-1}$ durch alleinige Abweichung dieses Spielers entsteht, also $x^{k} = \left(x^{k-1} \middle| x^{k}_{i(k)}\right)$.
+Durch dieses Verfahren erhält man eine Folge von Strategieprofilen, die jeweils durch Abweichung eines einzelnen Spielers auseinander hervorgehen, wobei dieser Spieler dabei seine Kosten senkt. Eine solche Folge bezeichnen \citeauthor{MonShap} in \cite{MonShap} als \glqq Verbesserungspfad\grqq. Stellt man andere Bedingungen an die Kostenveränderung für den abweichenden Spieler, so erhält man analog andere Arten von Pfaden im Strategieraum (vergleiche etwa \cite{CharExOrdPot} und \cite{BestRespPot}).
+
+\begin{defn}\label{defn:Schritte}
+	Ein Tupel von Strategieprofilen $(x^0, x^1) \in X\times X$ nennen wir einen \emph{Schritt}, wenn $x^1$ durch Abweichung eines einzelnen Spielers aus $x^0$ entsteht. Das heißt also, wenn es einen Spieler $i \in I$ gibt, sodass $x^1 = (x^0 \mid x^1_i)$ gilt. 
+	
+	Ein solcher Schritt heißt
+	\begin{itemize}
+		\item \emph{Nichtverschlechterungsschritt}, wenn sich der abweichende Spieler nicht verschlechtert, d.h. $c_i(x^0) \geq c_i(x^1)$.
+		\item \emph{Verbesserungsschritt}, wenn sich der abweichende Spieler echt verbessert, wenn also $c_i(x^0) > c_i(x^1)$ gilt.
+		\item \emph{Beste-Antwort-Schritt}, wenn der abweichende Spieler eine für ihn bestmögliche Antwort wählt, d.h. $\min_{\hat{x}_i \in X_i} c_i(x^0 \mid \hat{x}_i) = c_i(x^1)$.		
+	\end{itemize}
+\end{defn}
+
+\begin{defn}\label{defn:Pfade}
+	Eine Folge von Strategieprofilen $\gamma = (x^0, x^1, x^2, \dots) \in X^\IN$ ist ein \emph{Pfad}, wenn je zwei aufeinanderfolgende Strategieprofile einen Schritt bilden. Das heißt wenn es für jeden Schritt $k$ einen Spieler $i(k) \in I$ gibt, sodass das Profil $x^{k}$ aus $x^{k-1}$ durch alleinige Abweichung dieses Spielers entsteht, also $x^{k} = \left(x^{k-1} \middle| x^{k}_{i(k)}\right)$.
 	
 	Ein solcher Pfad heißt
 	\begin{itemize}
-		\item \emph{Nichtverschlechterungspfad}, wenn sich der abweichende Spieler jeweils nicht verschlechtert. Das heißt es gilt in jedem Schritt: $c_{i(k)}(x^{k}) \leq c_{i(k)}(x^{k-1})$.
-		\item \emph{schwacher Verbesserungspfad}, wenn er ein Nichtverschlechterungspfad ist und sich an mindestens einer Stelle der abweichende Spieler echt verbessert. Das heißt es gibt einen Schritt $k$ mit $c_{i(k)}(x^k) < c_{i(k)}(x^{k-1})$.
-		\item \emph{Verbesserungspfad}, wenn sich der abweichende Spieler jeweils echt verbessert. Das heißt es gilt in \emph{jedem} Schritt: $c_{i(k)}(x^k) < c_{i(k)}(x^{k-1})$.
-		\item \emph{Beste-Antwort-Pfad}\todo{Voorneveld nennt es beste Antwort-kompatibel}, wenn der abweichende Spieler jeweils eine beste Alternativstrategie wählt, d.h. $c_{i(k)}(x^k) = \min_{\hat{x}_{i(k)} \in X_{i(k)}} c_{i(k)}(x^{k-1} \mid \hat{x}_i)$.
+		\item \emph{Nichtverschlechterungspfad}, wenn jeder Schritt ein Nichtverschlechterungsschritt ist, d.h. für alle $k$ gilt $c_{i(k)}(x^{k-1}) \geq c_{i(k)}(x^{k})$.
+		\item \emph{schwacher Verbesserungspfad}, wenn er ein Nichtverschlechterungspfad ist und mindestens ein Schritt ein Verbesserungsschritt ist.
+		\item \emph{Verbesserungspfad}, wenn jeder Schritt ein Verbesserungsschritt ist.
+		\item \emph{Beste-Antwort-Pfad}\footnote{In \cite{BestRespPot} werden solche Pfade als \glqq Beste-Antwort-kompatibel\grqq{} bezeichnet.}, jeder Schritt ein Beste-Antwort-Schritt ist, d.h. $\min_{\hat{x}_{i(k)} \in X_{i(k)}} c_{i(k)}(x^{k-1} \mid \hat{x}_i) = c_{i(k)}(x^k)$.
 		\item \emph{schwacher Beste-Antwort-Verbesserungspfad}, wenn er ein schwacher Verbesserungspfad und ein Beste-Antwort-Pfad ist.
 		\item \emph{Beste-Antwort-Verbesserungspfad}, wenn er ein Verbesserungspfad und ein Beste-Antwort-Pfad ist.
 	\end{itemize}
-	
+\end{defn}
+
+\begin{defn}\label{defn:Pfade2}	
 	Für einen endlichen Pfad $\gamma = (x^0, \dots, x^n)$ ist
 	\begin{itemize}
 		\item die \emph{Gesamtänderung} entlang des Pfades $\PfadAend(\gamma)$ definiert als die Summe aller Änderungen für die jeweils abweichenden Spieler:
 		\[\PfadAend(\gamma) \coloneqq \sum_{k=1}^{n} \left(c_{i(k)}(x^k) - c_{i(k)}(x^{k-1})\right) \]
-		\item $\gamma$ ein \emph{abgeschlossener Verbesserungspfad}, wenn er ein Verbesserungspfad ist, der nicht mehr nach hinten verlängert werden kann, d.h. es keine Strategie $\hat{x}_i$ gibt, mit $c_{i}(x^n \mid \hat{x}_i) < c_{i}(x^n)$.\todo{Schöner formulieren}
+		\item $\gamma$ ein \emph{abgeschlossener Verbesserungspfad}, wenn er ein Verbesserungspfad ist, der nicht mehr nach hinten verlängert werden kann, d.h. es keine Strategie $\hat{x}_i$ gibt, mit $c_{i}(x^n) > c_{i}(x^n \mid \hat{x}_i)$.
 		\item $\gamma$ ein \emph{$n$-Zykel}, wenn $x^0 = x^n$ gilt.
 		\item $\invPf{\gamma} \coloneqq (x^n, x^{n-1}, \dots, x^0)$ der in die andere Richtung durchlaufende Pfad.
 	\end{itemize}
@@ -74,7 +122,8 @@ Aus \cite{MonShap}/\cite{BestRespPot}\todo{Motivation/Anschauung}
 	Ist zusätzlich $\mu = (y^0, y^1, \dots)$ ein beliebiger Pfad, so ist $\gamma\Pfadkomp\mu \coloneqq (x^0, \dots, x^n, y^0, y^1, \dots)$ die Verknüpfung der beiden Pfade (und offensichtlich selbst wieder ein Pfad).
 \end{defn}
 
-\begin{beob}\todo{Ordnen/Aussortieren/Beweise?}
+\begin{beob}\label{beob:Pfade}
+	Einige einfache Beobachtungen über Pfade:
 	\begin{itemize}
 		\item Ein endlicher Nichtverschlechterungspfad $\gamma$ ist genau dann ein schwacher Verbesserungspfad, wenn $\invPf{\gamma}$ kein Nichtverschlechterungspfad ist. 
 		
@@ -85,21 +134,11 @@ Aus \cite{MonShap}/\cite{BestRespPot}\todo{Motivation/Anschauung}
 	\end{itemize}
 \end{beob}
 
-\begin{defn}
-	Eine Teilmenge $Y \subseteq X$ des Strategieraumes bezeichnen wir als \emph{Pfadzusammenhangskomponente}, wenn es für je zwei $x, y \in Y$ einen Pfad von $x$ nach $y$ in $Y$ gibt. Zu einem gegebeenen Strategieprofil $x \in X$ ist \emph{die Pfadzusammenhangskomponente von $x$} die (bezüglich Inklusion) maximale Pfadzusammenhangskomponente $Y_x \subseteq X$, welche $x$ enthält.\todo{Wohldefiniertheit? Evtl. direkt mit Relationen definieren?}
-\end{defn}
-
-\begin{beob}
-	Die Pfadzusammenhangskomponente eines Strategieprofils $x$ besteht aus allen Strategieprofilen, die sich an höchstens endlich vielen Stellen von $x$ unterscheiden, d.h.
-		\[Y_x = \left\{y \in X \mid \exists J \subseteq I: \abs{J} < \infty \text{ und } \forall i \in I\setminus J: x_i = y_i \right\} \]
-	Insbesondere ist also für $N$-Personenspiele der gesamte Strategieraum eine einzige Zusammenhangskomponente.
-\end{beob}
+Der eingangs beschriebene natürliche Algorithmus zum Finden eines Nash-Gleichgewichtes terminiert genau dann immer, wenn alle Verbesserungspfade in dem gegebenen Spiel endlich sind. Diese Eigenschaft bezeichnen wir als als finite improvement property:
 
 \begin{defn}
 	Ein Spiel $\Gamma$ hat die \emph{finite improvement property (FIP)}, wenn jeder Verbesserungspfad endlich ist.
 \end{defn}
-
-Eine anschauliche Bedeutung der FIP ist die, dass der natürliche Algorithmus zum Finden von Nash-Gleichgewichten immer terminiert: Dazu startet man mit einem beliebigen Strategieprofil und führt, solange dieses noch kein Nash-Gleichgewicht ist, einen der dann zur Auswahl stehenden Verbesserungsschritte durch. Im Laufe dieses Verfahrens beschreitet man gerade einen Verbesserungspfad und das Verfahren terminiert genau dann immer, wenn alle Verbesserungspfade endlich sind.
 
 \begin{beob}\label{beob:VerbPfadeundNGe}
 	Das Ende eines abgeschlossenen Verbesserungspfades ist immer ein Nash-Gleichgewicht. Denn wäre dem nicht so, dann gäbe es wenigstens einen Spieler, der sich durch Abweichen noch verbessern kann - was zu einer Verlängerung des Verbesserungspfades führen würde. 
@@ -111,27 +150,51 @@ Eine anschauliche Bedeutung der FIP ist die, dass der natürliche Algorithmus zu
 	Ein Spiel $\Gamma$ besitzt genau dann (mindestens) ein Nash-Gleichgewicht, wenn es (mindestens) einen endlichen, maximalen (Beste-Antwort-)Verbesserungspfad besitzt. Ein Spiel mit FIP besitzt dementsprechend immer wenigstens ein Nash-Gleichgewicht.
 \end{kor}
 
+Alternativ können auch Beste-Antwort-Schritte dazu verwendet werden Nash-Gleichgewichte zu charakterisieren:
+
+\begin{beob}\label{beob:BASchritteNG}
+	Eine Strategieprofil $x \in X$ ist genau dann ein Nash-Gleichgewicht, wenn $(x,x)$ für jeden Spieler ein Beste-Antwort-Schritt ist.
+\end{beob}
+
+Beste-Antwort-Pfade treten bei sogenannten Beste-Antwort-Dynamiken auf: Bei diesen handelt es sich ebenfalls um Verfahren zum Auffinden von Nash-Gleichgewichten, im Unterschied zum zuvor beschriebenen Verfahren wechselt der abweichende Spieler hierbei allerdings nicht zu irgendeiner für ihn besseren Strategie, sondern wählt direkt die (momentan) beste der ihm zur Verfügung stehenden Strategien. 
+
+Schließlich führen wir noch eigene Bezeichnungen für den Bereich eines Strategieraums ein, der von einem gegebenen Strategieprofil aus überhaupt mit Hilfe von Pfaden erreicht werden kann. 
+
+\begin{defn}
+	Eine Teilmenge $Y \subseteq X$ des Strategieraumes bezeichnen wir als \emph{Pfadzusammenhangskomponente}, wenn es für je zwei $x, y \in Y$ einen Pfad von $x$ nach $y$ in $Y$ gibt. Zu einem gegebeenen Strategieprofil $x \in X$ ist \emph{die Pfadzusammenhangskomponente von $x$} die (bezüglich Inklusion) maximale Pfadzusammenhangskomponente $Y_x \subseteq X$, welche $x$ enthält.
+\end{defn}
+
+\begin{beob}
+	Die Pfadzusammenhangskomponente eines Strategieprofils $x$ besteht aus allen Strategieprofilen, die sich an höchstens endlich vielen Stellen von $x$ unterscheiden, d.h.
+	\[Y_x = \left\{y \in X \mid \exists J \subseteq I: \abs{J} < \infty \text{ und } \forall i \in I\setminus J: x_i = y_i \right\} \]
+	Insbesondere ist also für $N$-Personenspiele der gesamte Strategieraum eine einzige Zusammenhangskomponente.
+\end{beob}
+
 
 \subsection{Auslastungsspiele}
 
+Eine Klasse von Spielen, welche (im endlichen Fall) immer ein Nash-Gleichgewicht besitzt, bilden die sogenannten Auslastungsspiele, welche erstmals von \citeauthor{RosenthalPotential} in \cite{RosenthalPotential} definiert wurden. Im folgenden wollen wir diese Klasse sowie einige Varianten davon definieren. Verschiedene Eigenschaften dieser Spiele sowie insbesondere ihre Beziehungen zu Potentialspielen werden wir später in \Cref{sec:Auslastungsspiele} diskutieren.
+
 \begin{defn}\label{def:Auslastungsmodel}
-	Ein \emph{Auslastungsmodell $M$} ist gegeben durch ein Tupel $(I, R, (S_i)_{i\in I}, (g_r)_{r \in R})$. Dabei ist
+	Ein \emph{Auslastungsmodell $M$} ist gegeben durch ein Tupel $(I, R, S \coloneqq \prod_{i\in I} S_i, (g_r)_{r \in R})$. Dabei ist
 	\begin{itemize}
 		\item $I$ die Menge der Spieler,
 		\item $R$ die Menge der zur Verfügung stehenden Ressourcen,
 		\item $g_r: \IR_{\geq 0} \to \IR$ eine Funktion, welche die Kosten der Ressource $r \in R$ in Abhängigkeit von ihrer Auslastung beschreibt, und
-		\item $S_i \subseteq \PSet(R)$ die Menge von Teilmengen der Ressourcenmenge, unter denen sich der Spieler $i$ für eine Teilmenge entscheiden kann. 
+		\item $S_i \subseteq \PSet(R)$ eine Menge von Teilmengen der Ressourcenmenge, unter denen sich der Spieler $i$ für eine Teilmenge entscheiden kann. 
 	\end{itemize}
 \end{defn}
 
 \begin{defn}\label{def:Auslastungsspiel}
-	Ein Auslastungsmodell $M$ induziert ein \emph{Auslastungsspiel} $\Gamma(M) := (I, S = (S_i)_{i\in I}, (c_i)_{i \in I})$ durch die Kostenfunktion:
-	\[c_i: S \to \IR: s \mapsto \sum_{r \in R} g_r(l_r(s)) \]
-	wobei $l_r: S \to \IN: s \mapsto \abs{\{i\in I \mid r \in s_i\}}$ die der Ressource ist, wenn alle $c_i$ und alle $l_r$ auf ganz $S$ wohldefiniert sind (also die entsprechenden Summen für jedes $s \in S$ konvergieren).
+	Ein Auslastungsmodell $M$ induziert durch die Lastfunktionen
+		\[l_r: S \to \IN: s \mapsto \abs{\{i\in I \mid r \in s_i\}}\]
+	und die Kostenfunktionen
+		\[c_i: S \to \IR: s \mapsto \sum_{r \in R} g_r(l_r(s)) \]
+	ein \emph{Auslastungsspiel} $\Gamma(M) := (I, S \coloneqq \prod_{i\in I} S_i, (c_i)_{i \in I})$, wenn alle $c_i$ und alle $l_r$ auf ganz $S$ wohldefiniert sind (also die entsprechenden Summen für jedes $s \in S$ absolut konvergieren).
 \end{defn}
 
-\begin{bem}
-	Eine Lastfunktion $l_r$ ist genau dann\todo{Wirklich \glqq genau dann wenn\grqq ? Dann evtl. in Definition aufnehmen.}{} wohldefiniert, wenn diese Ressource $r$ von höchstens endlich vielen verschiedenen Spielen benutzt werden kann. Das heißt wenn gilt: $\abs{\Set{i \in I | \exists s_i \in S_i: r \in s}} < \infty$. Sind alle $l_r$ bereits wohldefiniert, so ist eine hinreichende Bedingung für die Wohldefiniertheit von $c_i$, dass alle diesem Spieler zur Auswahl stehende Teilmengen von $R$ endlich sind. Diese Bedingung ist aber nicht notwendig.
+\begin{bem}\label{bem:AuslSpielWohldefiniertheit}
+	Eine Lastfunktion $l_r$ ist genau dann wohldefiniert, wenn diese Ressource $r$ von höchstens endlich vielen verschiedenen Spielen benutzt werden kann. Das heißt wenn gilt: $\abs{\Set{i \in I | \exists s_i \in S_i: r \in s}} < \infty$. Sind alle $l_r$ bereits wohldefiniert, so ist eine hinreichende Bedingung für die Wohldefiniertheit von $c_i$, dass alle diesem Spieler zur Auswahl stehende Teilmengen von $R$ endlich sind. Diese Bedingung ist aber nicht notwendig.
 	
 	Insbesondere induzieren Auslastungsmodelle mit endlicher Ressourcen- und Spielerzahl immer ein Auslastungsspiel.
 	
@@ -139,7 +202,7 @@ Eine anschauliche Bedeutung der FIP ist die, dass der natürliche Algorithmus zu
 \end{bem}
 
 \begin{bsp}
-	Ein Beispiel für Auslastungsmodelle sind \emph{Netzwerkauslastungsmodelle}. Diese sind gegeben durch einen (nicht notwendigerweise endlichen) Multigraphen $G=(V,E)$, einer Kostenfunktion $c_e: \IR_{\geq 0} \to \IR$ für jede Kante $e \in E$ und für jeden Spieler $i \in I$ je ein ausgezeichneter Start- und Endknoten $s_i, t_i \in V$. Die Ressourcen sind dann die Kanten des Graphen, die Strategien von Spieler $i \in I$ entsprechen den endlichen $s_i,t_i$-Pfaden in $G$. 
+	Ein Beispiel für Auslastungsmodelle sind \emph{Netzwerkauslastungsmodelle}. Diese sind gegeben durch einen (nicht notwendigerweise endlichen) Multigraphen $G=(V,E)$, eine Kostenfunktion $g_e: \IR_{\geq 0} \to \IR$ für jede Kante $e \in E$ und für jeden Spieler $i \in I$ je ein ausgezeichneter Start- und Endknoten $s_i, t_i \in V$. Die Ressourcen sind dann die Kanten des Graphen, die Strategien von Spieler $i \in I$ entsprechen den endlichen $s_i,t_i$-Pfaden in $G$. 
 	
 	Zusätzlich ist es möglich bestimmte Kanten nur für einen Teil der Spieler zuzulassen. Dadurch wird dann der Strategieraum der anderen Spieler entsprechend eingeschränkt.
 \end{bsp}
@@ -159,12 +222,11 @@ Verallgemeinerungen von Auslastungsspielen erhalten wir durch das Einführen von
 	\end{itemize}	
 \end{defn}
 
-\begin{bsp}.
-	
-	\todo[inline]{gewichtetes Netzwerkauslastungsspiel}
-\end{bsp}
+\begin{beob}
+	Für (last-)gewichtete Auslastungsspiele ist es auch möglich, dass abzählbar unendlich viele Spieler eine Ressource nutzen können (und die entsprechende Lastfunktion dennoch wohldefiniert ist) - beispielsweise dann, wenn der Gewichtsvektor von der Form $(2^n)_{n \in \IN}$ ist.
+\end{beob}
 
-Weitere Varianten von Auslastungsspielen:\todo{Quelle?}
+Einige weitere Varianten von Auslastungsspielen sind:
 
 \begin{defn}\label{def:weitereAuslastungsspiel}
 	\begin{itemize}
@@ -199,7 +261,7 @@ Eine andere Möglichkeit ist, dass die zulässigen Teilmengen eines Spielers Bas
 \end{defn}
 
 \begin{defn}
-	Ein Teilmengensystem $M \subseteq \PSet(R)$ auf einer endlichen Menge $R$ heißt Matroid, wenn es die folgenden drei Axiome erfüllt:\todo{[citation needed(?)] Matroid}
+	Ein Teilmengensystem $M \subseteq \PSet(R)$ auf einer endlichen Menge $R$ heißt Matroid, wenn es die folgenden drei Axiome erfüllt (vgl. \cite[Abschnitt 39.1]{CombOptMatroide})
 	\begin{enumerate}
 		\item $\emptyset \in M$ (oder äquivalent dazu: $M \neq \emptyset$)
 		\item $M$ ist abgeschlossen unter Inklusion, d.h. $\forall S \in M, T \subseteq M: T \subseteq S \implies T \in M$.
@@ -208,13 +270,13 @@ Eine andere Möglichkeit ist, dass die zulässigen Teilmengen eines Spielers Bas
 	Die Mengen in $M$ bezeichnen wir dann als \emph{unabhängige Mengen}, die bezüglich Inklusion maximalen Mengen unter diesen nennen wir \emph{Basen des Matroids}.
 \end{defn}
 
-Eine wichtige Eigenschaft, welche alle Matroide erfüllen, ist der starke Basisaustauschsatz (vgl. \cite{OptiIVSkript}[Satz 3.7]):
+Eine wichtige Eigenschaft, welche alle Matroide erfüllen, ist der starke Basisaustauschsatz (vgl. \cite[Theorem 29.12]{CombOptMatroide}):
 
 \begin{satz}
-	Seien $M$ ein Matroid, $B_1, B_2$ zwei Basen von $M$ und $r \in B_1 \setminus B_2$ beliebig. Dann gibt es ein Element $q \in B_2 \setminus B_1$, sodass das vertauschen dieser beiden Elemente wieder zwei Basen ergibt, d.h. sowohl $B_1 \setminus \set{r} \cup \set{q}$ als auch $B_2 \setminus \set{q} \cup \set{r}$ sind ebenfalls Basen von $M$.
+	Seien $M$ ein Matroid, $B_1, B_2$ zwei Basen von $M$ und $r \in B_1 \setminus B_2$ beliebig. Dann gibt es ein Element $q \in B_2 \setminus B_1$, sodass das Vertauschen dieser beiden Elemente wieder zwei Basen ergibt, d.h. sowohl $B_1 \setminus \set{r} \cup \set{q}$ als auch $B_2 \setminus \set{q} \cup \set{r}$ sind ebenfalls Basen von $M$.
 \end{satz}
 
-Mittels Induktion ergibt sich daraus die Basen-Matching-Eigenschaft (vgl. \cite{OptiIVSkript}[Lemma 3.2]):
+Mittels Induktion ergibt sich daraus die Basen-Matching-Eigenschaft (\cite[Korollar 39.12a]{CombOptMatroide}):
 
 \begin{kor}\label{kor:BasenMatchingEig}
 	Seien $M$ ein Matroid und $B_1, B_2$ zwei Basen von $M$. Dann gibt es eine Partitionierung der symmetrischen Differenz $B_1 \symDiff B_2 \coloneqq B_1 \setminus B_2 \cup B_2 \setminus B_1$ in eine Menge von Tupeln der Form $(q,r)$ mit $q \in B_1\setminus B_2$ und $r \in B_2 \setminus B_1$, sodass $B_1 \setminus \set{q} \cup \set{r}$ ebenfalls eine Basis von $M$ ist. Es gibt also eine Menge von Tupeln $A \subseteq (B_1 \setminus B_2) \times (B_2 \setminus B_1)$, sodass gilt:
